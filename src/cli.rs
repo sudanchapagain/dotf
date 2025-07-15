@@ -1,7 +1,7 @@
 use clap::{Parser, Subcommand};
 
 #[derive(Parser)]
-#[command(version, about = "dotfiles - Manage dotfiles with symlinks")]
+#[command(version, about = "dotf - manage dotfiles with symlinks")]
 pub struct Cli {
     #[arg(short, long, global = true)]
     pub force: bool,
@@ -15,8 +15,10 @@ pub struct Cli {
 
 #[derive(Subcommand)]
 pub enum Command {
+    #[command(about = "Link dotfiles from .dotfiles directory to defined paths")]
     Link,
+    #[command(about = "Remove linked dotfiles")]
     Remove,
+    #[command(about = "Show the status of dotfiles")]
     Status,
 }
-

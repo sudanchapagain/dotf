@@ -10,7 +10,7 @@ struct Mappings {
 }
 
 pub fn parse_mappings() -> anyhow::Result<HashMap<String, String>> {
-    let mappings_path = dotfiles_dir().join(".mappings");
+    let mappings_path = dotfiles_dir(None).join(".mappings");
     let content = fs::read_to_string(mappings_path)?;
     let parsed: Mappings = toml::from_str(&content)?;
     Ok(parsed.general)

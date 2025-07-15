@@ -6,16 +6,21 @@ use std::{
     path::Path,
 };
 
-use colored::*;
 use crate::{
     state::{load_state, save_state},
     util::{dotfiles_dir, expand_user_path},
 };
+use colored::*;
 
-pub fn link_files(mappings: &HashMap<String, String>, force: bool, dry_run: bool) -> anyhow::Result<()> {
+pub fn link_files(
+    mappings: &HashMap<String, String>,
+    force: bool,
+    dry_run: bool,
+    base_dir: Option<&Path>,
+) -> anyhow::Result<()> {
     for (src_rel, dest_str) in mappings {
-        let src = dotfiles_dir().join(src_rel);
-        let dest = expand_user_path(dest_str);
+        let src = dotfiles_dir(base_dir).join(src_rel);
+        let dest = expand_user_path(dest_str, base_dir);
 
         if dest.exists() {
             if !force && !prompt_overwrite(&dest) {
@@ -27,7 +32,11 @@ pub fn link_files(mappings: &HashMap<String, String>, force: bool, dry_run: bool
         }
 
         if dry_run {
-            println!("[Dry-run] Would link: {} -> {}", src.display(), dest.display());
+            println!(
+                "[Dry-run] Would link: {} -> {}",
+                src.display(),
+                dest.display()
+            );
         } else {
             if let Some(parent) = dest.parent() {
                 fs::create_dir_all(parent)?;
@@ -39,13 +48,16 @@ pub fn link_files(mappings: &HashMap<String, String>, force: bool, dry_run: bool
     }
 
     if !dry_run {
-        save_state(mappings)?;
+        save_state(mappings, base_dir)?;
     }
 
     Ok(())
 }
 
-pub fn remove_links(state: &HashMap<String, String>) -> anyhow::Result<()> {
+pub fn remove_links(
+    state: &HashMap<String, String>,
+    base_dir: Option<&Path>,
+) -> anyhow::Result<()> {
     for dest_str in state.keys() {
         let dest = Path::new(dest_str);
         if dest.is_symlink() {
@@ -56,17 +68,17 @@ pub fn remove_links(state: &HashMap<String, String>) -> anyhow::Result<()> {
         }
     }
 
-    fs::write(crate::state::state_path(), "")?;
+    fs::write(crate::state::state_path(base_dir), "")?;
     Ok(())
 }
 
-pub fn status(mappings: &HashMap<String, String>) -> anyhow::Result<()> {
-    let state = load_state();
+pub fn status(mappings: &HashMap<String, String>, base_dir: Option<&Path>) -> anyhow::Result<()> {
+    let state = load_state(base_dir);
     let mut seen = HashMap::new();
 
     for (src_rel, dest_str) in mappings {
-        let src = dotfiles_dir().join(src_rel);
-        let dest = expand_user_path(dest_str);
+        let src = dotfiles_dir(base_dir).join(src_rel);
+        let dest = expand_user_path(dest_str, base_dir);
         let dest_str = dest.to_string_lossy().to_string();
 
         seen.insert(dest_str.clone(), true);
@@ -96,7 +108,14 @@ fn backup_existing(dest: &Path, dry_run: bool) {
     let mut backup_path;
 
     loop {
-        backup_path = dest.with_extension(format!("bak{}", if suffix == 1 { "".to_string() } else { suffix.to_string() }));
+        backup_path = dest.with_extension(format!(
+            "bak{}",
+            if suffix == 1 {
+                "".to_string()
+            } else {
+                suffix.to_string()
+            }
+        ));
         if !backup_path.exists() {
             break;
         }
@@ -104,7 +123,11 @@ fn backup_existing(dest: &Path, dry_run: bool) {
     }
 
     if dry_run {
-        println!("[Dry-run] Would back up {} to {}", dest.display(), backup_path.display());
+        println!(
+            "[Dry-run] Would back up {} to {}",
+            dest.display(),
+            backup_path.display()
+        );
     } else {
         fs::rename(dest, &backup_path).unwrap_or_else(|e| {
             eprintln!("Failed to back up {}: {}", dest.display(), e);
@@ -131,4 +154,3 @@ fn prompt_overwrite(dest: &Path) -> bool {
         _ => false,
     }
 }
-

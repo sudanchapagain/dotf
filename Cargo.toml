@@ -1,5 +1,5 @@
 [package]
-name = "dot"
+name = "dotf"
 version = "0.1.0"
 edition = "2024"
 
@@ -10,3 +10,7 @@ toml = "0.8"
 dirs = "6.0"
 colored = "3.0"
 anyhow = "1.0"
+
+[dev-dependencies]
+tempfile = "3.10"
+dotf = { path = "." }
