@@ -1,5 +1,5 @@
-dot
-===
+dotf
+====
 
 a small dotfiles manager which maps your declared files to destination with
 symlinks.
@@ -23,10 +23,10 @@ usage
   "starship/config" = "~/.config/starship/config"
   ```
 
-- then, start using the CLI with `dot link` or `dot -l` to map everything.
-- if you want to remove all links then use `dot remove` or `dot -r`.
+- then, start using the CLI with `dotf link` or `dotf -l` to map everything.
+- if you want to remove all links then use `dotf remove` or `dotf -r`.
 - if you want to check status of entries on which one is not linked and
-  which is use `dot status` or `dot -s`.
+  which is use `dotf status` or `dotf -s`.
 
 **IF YOU ARE USING GIT OR ANY OTHER VERSION CONTROL REMEMBER TO IGNORE `.state`
 FILE IN YOUR `~/.dotfiles/` DIRECTORY.**
