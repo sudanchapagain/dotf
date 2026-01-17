@@ -16,6 +16,7 @@ pub fn link_files(
     mappings: &HashMap<String, String>,
     force: bool,
     dry_run: bool,
+    skip_conflicts: bool,
     base_dir: Option<&Path>,
 ) -> anyhow::Result<()> {
     for (src_rel, dest_str) in mappings {
@@ -23,7 +24,7 @@ pub fn link_files(
         let dest = expand_user_path(dest_str, base_dir);
 
         if dest.exists() {
-            if !force && !prompt_overwrite(&dest) {
+            if !force && !prompt_overwrite(&dest, skip_conflicts) {
                 println!("Skipped: {}", dest.display());
                 continue;
             } else if force {
@@ -136,11 +137,17 @@ fn backup_existing(dest: &Path, dry_run: bool) {
     }
 }
 
-fn prompt_overwrite(dest: &Path) -> bool {
+fn prompt_overwrite(dest: &Path, skip_conflicts: bool) -> bool {
+    if skip_conflicts {
+        return false;
+    }
+
     println!("Destination {} already exists.", dest.display());
     println!("  [s]kip, [b]ackup, [f]orce overwrite, [a]bort?");
+
     let mut input = String::new();
     io::stdin().read_line(&mut input).unwrap();
+
     match input.trim() {
         "s" => false,
         "b" => true,

@@ -18,7 +18,7 @@ fn test_link_remove_status() -> anyhow::Result<()> {
     fs::write(dotfiles_dir.join("vimrc"), vimrc_content)?;
 
     // 2. Link files
-    fsops::link_files(&mappings, false, false, Some(home_dir))?;
+    fsops::link_files(&mappings, false, false, false, Some(home_dir))?;
     let dest_path = home_dir.join(".vimrc");
     assert!(dest_path.is_symlink());
     assert_eq!(fs::read_to_string(dest_path)?, vimrc_content);

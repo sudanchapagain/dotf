@@ -16,7 +16,9 @@ pub fn run() -> anyhow::Result<()> {
     let mappings = parse_mappings()?;
 
     match cli.command {
-        Some(cli::Command::Link) => link_files(&mappings, cli.force, cli.dry_run, None)?,
+        Some(cli::Command::Link) => {
+            link_files(&mappings, cli.force, cli.dry_run, cli.skip_conflicts, None)?
+        }
         Some(cli::Command::Remove) => {
             let state = load_state(None);
             remove_links(&state, None)?;

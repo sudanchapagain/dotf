@@ -9,6 +9,9 @@ pub struct Cli {
     #[arg(short = 'd', long, global = true)]
     pub dry_run: bool,
 
+    #[arg(short = 's', long, global = true)]
+    pub skip_conflicts: bool,
+
     #[command(subcommand)]
     pub command: Option<Command>,
 }
