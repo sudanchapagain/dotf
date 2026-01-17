@@ -41,10 +41,11 @@ Commands:
   help    Print this message or the help of the given subcommand(s)
 
 Options:
-  -f, --force
-  -d, --dry-run
-  -h, --help     Print help
-  -V, --version  Print version
+  -f, --force           forcefully link by renaming existing files when conflicts arise
+  -d, --dry-run         skip destructive actions while appearing to perform said action
+  -s, --skip-conflicts  skip linking for all conflicts that arise
+  -h, --help            Print help
+  -V, --version         Print version
 ```
 
 
