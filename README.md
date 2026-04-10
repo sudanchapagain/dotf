@@ -1,55 +1,69 @@
 # dotf
 
 A small dotfiles manager which symlinks the defined files in
-`~/.dotfiles/.mappings`.
+`~/.dotfiles/.mappings.toml`.
 
-## How do I use dotf?
+## How do i use `dotf`?
 
-- In `~/.dotfiles/` create a new file called `.mappings`
-- It should be in TOML format with everything under `[general]` table.
-- The entries should follow `"source" = "destination"` pattern where source
-  should have path relative to `~/.dotfiles/` whereas destination should not.
+In `~/.dotfiles/`, create a new file called `.mappings.toml`. It should be in TOML
+format with everything under `[general]` table. The entries should follow
+`"source" = "destination"` pattern where source should have path relative to
+`~/.dotfiles/` whereas destination should not.
 
-  An example `.mappings` file:
+An example `.mappings.toml` file:
 
-  ```toml
-  [general]
-  # ghostty/config is ~/.dotfiles/ghostty/config
-  "ghostty/config" = "/home/username/.config/ghostty/config"
-  # starship/config is ~/.dotfiles/starship/config
-  "starship/config" = "~/.config/starship/config"
-  ```
+```toml
+[general]
+# ghostty/config is ~/.dotfiles/ghostty/config
+"ghostty/config" = "/home/username/.config/ghostty/config"
+# starship/config is ~/.dotfiles/starship/config
+"starship/config" = "~/.config/starship/config"
+ ```
 
-- Then, with the cli you can run `dotf link` or `dotf -l` to map everything.
-- If you want to remove all links then use `dotf remove` or `dotf -r`.
-- If you want to check status of entries on which one is not linked and
-  which is use `dotf status` or `dotf -s`.
+Then, with the CLI you can run `dotf link` to map everything. If you want to
+remove all links then use `dotf remove`. If you want to check status of
+entries on which one is not linked and which is use `dotf status`.
 
-## What more can I do?
+## What more can i do?
 
 Just run `dotf -h`. You should see something similar to output below:
 
-```txt
+```console
+$ dotf -h
+
+Usage: dotf [--help] [--version] {remove,status,sync}
+
 dotf - manage dotfiles with symlinks
 
-Usage: dotf [OPTIONS] [COMMAND]
+Optional arguments:
+  -h, --help     shows help message and exits
+  -v, --version  prints version information and exits
 
-Commands:
-  link    Link dotfiles from .dotfiles directory to defined paths
-  remove  Remove linked dotfiles
-  status  Show the status of dotfiles
-  help    Print this message or the help of the given subcommand(s)
+Subcommands:
+  remove        Remove linked dotfiles.
+  status        Show the status of dotfiles.
+  sync          Sync everything to defined paths.
+```
 
-Options:
-  -f, --force           forcefully link by renaming existing files when conflicts arise
-  -d, --dry-run         skip destructive actions while appearing to perform said action
-  -s, --skip-conflicts  skip linking for all conflicts that arise
-  -h, --help            Print help
-  -V, --version         Print version
+The sync command specifically has few flags:
+
+```console
+$ dotf sync -h
+
+Usage: dotf sync [--help] [--version] [[--force]|[--skip-conflicts]] [--dry-run]
+
+Sync everything to defined paths.
+
+Optional arguments:
+  -h, --help            shows help message and exits
+  -v, --version         prints version information and exits
+  -f, --force           Forcefully link by renaming existing files when conflicts arise.
+  -s, --skip-conflicts  Skip linking for all conflicts that arise.
+  -d, --dry-run         Skip destructive actions while appearing to perform said action.
 ```
 
 
-> [!IMPORTANT]
+> [!TIP]
 > If you are using Git or any other version control remember to ignore `.state`
 > file in your `~/.dotfiles/` directory.
 
@@ -58,8 +72,9 @@ Options:
 `dotf` does not do funny business, you can simply run the following command to
 build the program.
 
-```sh
-cargo build .
+```nushell
+meson setup --reconfigure build
+meson compile -C build
 ```
 
 ## What are my rights to the code?
