@@ -7,13 +7,9 @@ project(
   ]
 )
 
-fmt = subproject('fmt')
-argparse = subproject('argparse')
-tomlplusplus = subproject('tomlplusplus')
-
-fmt_dep = fmt.get_variable('fmt_dep')
-argparse_dep = argparse.get_variable('argparse_dep')
-tomlplusplus_dep = tomlplusplus.get_variable('tomlplusplus_dep')
+fmt_dep = dependency('fmt')
+argparse_dep = dependency('argparse')
+tomlplusplus_dep = dependency('tomlplusplus')
 
 sources = files(
   'src/main.cpp',
