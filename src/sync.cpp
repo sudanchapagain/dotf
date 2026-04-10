@@ -1,12 +1,11 @@
-#include "config.hpp"
-#include "helpers.hpp"
-
 #include <fmt/core.h>
 #include <filesystem>
 #include <system_error>
-#include <cstdlib>
-#include "state.hpp"
 #include <algorithm>
+
+#include "include/config.hpp"
+#include "include/helpers.hpp"
+#include "include/state.hpp"
 
 void sync(
     bool is_dry_run_enabled,

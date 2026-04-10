@@ -1,5 +1,6 @@
-#include "config.hpp"
 #include <fmt/core.h>
+
+#include "include/config.hpp"
 
 static std::string status_to_string(EntryStatus s) {
     switch (s) {

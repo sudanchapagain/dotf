@@ -1,6 +1,7 @@
-#include "config.hpp"
 #include <filesystem>
 #include <fmt/core.h>
+
+#include "include/config.hpp"
 
 void
 delete_symlink(const std::string& link) {

@@ -1,6 +1,6 @@
-#include "config.hpp"
-#include "path.hpp"
-#include "helpers.hpp"
+#include "include/config.hpp"
+#include "include/path.hpp"
+#include "include/helpers.hpp"
 
 Mappings
 load_mappings(toml::node_view<toml::node> table) {

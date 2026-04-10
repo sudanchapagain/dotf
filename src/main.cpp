@@ -4,9 +4,9 @@
 #include <argparse/argparse.hpp>
 #include <toml++/toml.hpp>
 
-#include "path.hpp"
-#include "config.hpp"
-#include "commands.hpp"
+#include "include/path.hpp"
+#include "include/config.hpp"
+#include "include/commands.hpp"
 
 #include <iostream>
 #include <string>

@@ -2,7 +2,7 @@
 #include <unordered_map>
 #include <filesystem>
 
-#include "config.hpp"
+#include "include/config.hpp"
 
 std::vector<EvaluatedEntry>
 evaluate(
