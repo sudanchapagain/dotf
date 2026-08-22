@@ -13,7 +13,10 @@
 
 int
 main(int argc, char *argv[]) {
-    argparse::ArgumentParser program("dotf", "3.0.0" /* update on meson.build too */);
+#ifndef DOTF_VERSION
+#define DOTF_VERSION "unknown"
+#endif
+    argparse::ArgumentParser program("dotf", DOTF_VERSION);
     program.add_description("dotf - manage dotfiles with symlinks");
 
     argparse::ArgumentParser sync_command("sync");
@@ -44,7 +47,7 @@ main(int argc, char *argv[]) {
     try {
         program.parse_args(argc, argv);
     } catch (const std::exception& err) {
-        fmt::println(err.what());
+        fmt::println("{}", err.what());
 
         std::cerr << program;
         std::exit(1);

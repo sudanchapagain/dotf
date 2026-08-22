@@ -46,25 +46,21 @@ evaluate(
         bool symlink_exists = false;
 
         std::error_code ec;
-        if (std::filesystem::exists(dest, ec)) {
-            std::filesystem::path dest_path = dest;
-            std::error_code ec;
+        std::filesystem::path dest_path = dest;
+        if (
+            std::filesystem::exists(dest_path, ec) &&
+            std::filesystem::is_symlink(dest_path, ec)
+        ) {
+            auto target = std::filesystem::read_symlink(dest_path, ec);
+            if (!ec) {
+                auto expected = std::filesystem::path(m->source);
 
-            if (
-                std::filesystem::exists(dest_path, ec) &&
-                std::filesystem::is_symlink(dest_path, ec)
-            ) {
-                auto target = std::filesystem::read_symlink(dest_path, ec);
-                if (!ec) {
-                    auto expected = std::filesystem::path(m->source);
+                std::error_code ec2;
+                auto norm_target   = std::filesystem::weakly_canonical(target, ec2);
+                auto norm_expected = std::filesystem::weakly_canonical(expected, ec2);
 
-                    std::error_code ec2;
-                    auto norm_target   = std::filesystem::weakly_canonical(target, ec2);
-                    auto norm_expected = std::filesystem::weakly_canonical(expected, ec2);
-
-                    if (!ec2 && norm_target == norm_expected) {
-                        symlink_exists = true;
-                    }
+                if (!ec2 && norm_target == norm_expected) {
+                    symlink_exists = true;
                 }
             }
         }

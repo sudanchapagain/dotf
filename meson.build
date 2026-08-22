@@ -1,9 +1,9 @@
 project(
   'dotf',
   'cpp',
-  version: '3.0.0', # update in main.cpp too 
+  version: '3.0.0',
   default_options: [
-        'c_std=c++17',
+        'cpp_std=c++17',
   ]
 )
 
@@ -23,6 +23,7 @@ sources = files(
 out = executable(
   'dotf',
   sources,
+  cpp_args: ['-DDOTF_VERSION="@0@"'.format(meson.project_version())],
   dependencies: [fmt_dep, argparse_dep, tomlplusplus_dep],
   install: true
 )

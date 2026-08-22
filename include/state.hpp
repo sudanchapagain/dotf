@@ -1,10 +1,12 @@
+#pragma once
+
 #include <fstream>
 #include <toml++/toml.hpp>
 #include <filesystem>
 #include <stdexcept>
 
-#include "config.hpp"
-#include "path.hpp"
+#include "include/config.hpp"
+#include "include/path.hpp"
 
 inline void save_state(const Mappings& map) {
     toml::table root;
